@@ -1,10 +1,26 @@
 import streamlit as st
 
-# ▶️ DEBUG: show exactly what Streamlit read from secrets
-st.write("🔑 redirect_uri:", st.secrets["auth"]["redirect_uri"])
-st.write("🎫 client_id:   ", st.secrets["auth"]["auth0"]["client_id"])
-st.write("🔒 client_secret:", st.secrets["auth"]["auth0"]["client_secret"])
+# ─── DEBUG BLOCK ──────────────────────────────────────────────────────────
+# Don’t call st.login yet—just dump the values we care about and stop.
+redirect = st.secrets["auth"]["redirect_uri"]
+metadata = st.secrets["auth"]["auth0"]["server_metadata_url"]
+client_id = st.secrets["auth"]["auth0"]["client_id"]
+st.write("🔍 redirect_uri loaded:", redirect)
+st.write("🔍 server_metadata_url:", metadata)
+st.write("🔍 client_id:", client_id)
 st.stop()
+# ────────────────────────────────────────────────────────────────────────────
+
+# (Your real login logic would go below here)
+# if not st.user.is_logged_in:
+#     st.login("auth0")
+#     st.stop()
+
+# # ▶️ DEBUG: show exactly what Streamlit read from secrets
+# st.write("🔑 redirect_uri:", st.secrets["auth"]["redirect_uri"])
+# st.write("🎫 client_id:   ", st.secrets["auth"]["auth0"]["client_id"])
+# st.write("🔒 client_secret:", st.secrets["auth"]["auth0"]["client_secret"])
+# st.stop()
 
 # import streamlit as st
 # st.write("Client ID:", st.secrets.auth.auth0.client_id)
