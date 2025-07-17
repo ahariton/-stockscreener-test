@@ -1,33 +1,29 @@
 import streamlit as st
 from streamlit_oauth import OAuth2Component
+import requests
 
-# Setup Auth0 with values from secrets.toml
 oauth2 = OAuth2Component(
     client_id=st.secrets.oauth.client_id,
     client_secret=st.secrets.oauth.client_secret,
-    auth_url=st.secrets.oauth.auth_url,
+    authorize_url=st.secrets.oauth.auth_url,
     token_url=st.secrets.oauth.token_url,
     redirect_uri=st.secrets.oauth.redirect_uri,
-    user_info_url=st.secrets.oauth.userinfo_endpoint,
 )
 
-# Authenticate user
-token = oauth2.get_token()
+token = oauth2.authorize_button("🔐 Login with Auth0", "auth0_login")
 
-# If user not authenticated, stop the app
-if token is None:
+if token:
+    resp = requests.get(
+        st.secrets.oauth.userinfo_endpoint,
+        headers={"Authorization": f"Bearer {token['access_token']}"}
+    )
+    user_info = resp.json()
+    email = user_info.get("email", "")
+
+    if email not in st.secrets.oauth.allowed_emails:
+        st.error("🚫 Unauthorized user")
+        st.stop()
+
+    st.success(f"✅ Logged in as {email}")
+else:
     st.stop()
-
-# Get user info
-user_info = oauth2.get_user_info(token)
-email = user_info.get("email", "")
-
-# Restrict access
-if email not in st.secrets.oauth.allowed_emails:
-    st.error("🚫 Access denied")
-    st.stop()
-
-# App content for authorized users
-st.success(f"✅ Logged in as: {email}")
-st.title("📈 Test: Weekly Options Screener with Auth0")
-st.write("Welcome to the test version of your secure app!")
