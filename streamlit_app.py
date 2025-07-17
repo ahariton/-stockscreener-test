@@ -7,7 +7,7 @@ if not user:
 
 # Step 2: Access control
 email = user.get("email", "")
-allowed = st.secrets.oauth.auth0.allowed_emails
+allowed = st.secrets.auth0.allowed_emails
 
 if email not in allowed:
     st.error("🚫 You are not authorized to access this app.")
