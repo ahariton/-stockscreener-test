@@ -1,36 +1,32 @@
-from streamlit_oauth import OAuth2Component
 import streamlit as st
+from streamlit_oauth import OAuth2Component
 import requests
-import jwt
 
-# Step 1: Create the component
-oauth2 = OAuth2Component(st.secrets.oauth.client_id, st.secrets.oauth.client_secret)
+CLIENT_ID = st.secrets.oauth.client_id
+CLIENT_SECRET = st.secrets.oauth.client_secret
+REDIRECT_URI = st.secrets.oauth.redirect_uri
+SCOPE = "openid profile email"
 
-# Step 2: Trigger login
-token = oauth2.authorize_button(
-    name="Login with Auth0",
-    auth_url=st.secrets.oauth.auth_url,
-    token_url=st.secrets.oauth.token_url,
-    redirect_uri=st.secrets.oauth.redirect_uri,
-    scope="openid profile email",
-    key="auth"
-)
+oauth2 = OAuth2Component(CLIENT_ID, CLIENT_SECRET)
 
-# Step 3: Fetch user info and gate access
-if token:
-    userinfo_response = requests.get(
-        st.secrets.oauth.userinfo_endpoint,
-        headers={"Authorization": f"Bearer {token['access_token']}"}
-    )
-    userinfo = userinfo_response.json()
-    email = userinfo.get("email", "")
-
-    if email in st.secrets.oauth.allowed_emails:
-        st.success(f"✅ Logged in as {email}")
-        # your app logic goes here
+if 'token' not in st.session_state:
+    result = oauth2.authorize_button("🔐 Login with Auth0", REDIRECT_URI, SCOPE)
+    if result and 'token' in result:
+        st.session_state.token = result['token']
+        st.rerun()
     else:
-        st.error("🚫 You are not authorized to access this app.")
         st.stop()
-else:
-    st.warning("🔐 Please log in to access this app.")
+
+token = st.session_state['token']
+user_info = requests.get(
+    st.secrets.oauth.userinfo_endpoint,
+    headers={"Authorization": f"Bearer {token['access_token']}"}
+).json()
+
+email = user_info.get("email", "")
+if email not in st.secrets.oauth.allowed_emails:
+    st.error("🚫 Unauthorized")
     st.stop()
+
+st.success(f"✅ Logged in as {email}")
+# ... your screener logic here ...
