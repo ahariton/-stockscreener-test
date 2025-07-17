@@ -1,5 +1,4 @@
+pandas
 streamlit
 streamlit-oauth
-python-jose
-pandas
-PyJWT
+requests
