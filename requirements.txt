@@ -1,4 +1,6 @@
-streamlit>=1.42
+streamlit
 pandas
 requests
 PyJWT
+streamlit-auth0-component
+Authlib>=1.3.2
