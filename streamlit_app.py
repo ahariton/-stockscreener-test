@@ -1,5 +1,10 @@
 import streamlit as st
 
+import streamlit as st
+st.write("Client ID:", st.secrets.auth.auth0.client_id)
+st.write("Client Secret:", st.secrets.auth.auth0.client_secret)
+st.stop()
+
 # ▶️ DEBUG: print out what redirect_uri we actually loaded
 redirect = st.secrets["auth"]["redirect_uri"]
 st.write("🔍 Loaded redirect_uri:", redirect)
