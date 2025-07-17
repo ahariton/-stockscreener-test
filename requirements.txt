@@ -1,3 +1,4 @@
 streamlit
+streamlit-oauth
 python-jose
 pandas
