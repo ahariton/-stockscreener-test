@@ -1,13 +1,10 @@
 import streamlit as st
 
-# DEBUG BLOCK
-redirect = st.secrets["auth"]["redirect_uri"]
-metadata = st.secrets["auth"]["auth0"]["server_metadata_url"]
-client_id = st.secrets["auth"]["auth0"]["client_id"]
-
-st.write("🔍 redirect_uri loaded:", redirect)
-st.write("🔍 server_metadata_url:", metadata)
-st.write("🔍 client_id:", client_id)
+# DEBUG: show first/last 4 chars of your loaded secret
+secret = st.secrets["auth"]["auth0"]["client_secret"]
+prefix, suffix = secret[:4], secret[-4:]
+st.write("🔑 client_secret starts with:", prefix)
+st.write("🔑 client_secret ends   with:", suffix)
 st.stop()
 
 
