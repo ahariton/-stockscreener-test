@@ -1,5 +1,10 @@
 import streamlit as st
 
+# ▶️ DEBUG: print out what redirect_uri we actually loaded
+redirect = st.secrets["auth"]["redirect_uri"]
+st.write("🔍 Loaded redirect_uri:", redirect)
+st.stop()
+
 
 # Kick off login if necessary
 if not st.user.is_logged_in:
