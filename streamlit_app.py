@@ -1,23 +1,18 @@
 import streamlit as st
 
-# DEBUG: show first/last 4 chars of your loaded secret
-secret = st.secrets["auth"]["auth0"]["client_secret"]
-prefix, suffix = secret[:4], secret[-4:]
-st.write("🔑 client_secret starts with:", prefix)
-st.write("🔑 client_secret ends   with:", suffix)
-st.stop()
+# Step 1: Kick off OIDC login if the user isn’t already signed in
+if not st.user.is_logged_in:
+    st.login("auth0")
+    st.stop()
 
+# Step 2: Grab the user’s email and enforce your allow-list
+email = st.user["email"]
+if email not in st.secrets.auth.auth0.allowed_emails:
+    st.error("🚫 You are not authorized.")
+    st.logout()
+    st.stop()
 
-# # Kick off login if necessary
-# if not st.user.is_logged_in:
-#     st.login("auth0")
-#     st.stop()
+# Step 3: At this point you know who the user is and that they’re allowed
+st.success(f"✅ Logged in as {email}")
 
-# email = st.user["email"]
-# if email not in st.secrets.auth.auth0.allowed_emails:
-#     st.error("🚫 You are not authorized.")
-#     st.logout()
-#     st.stop()
-
-# st.success(f"✅ Logged in as {email}")
-# # …rest of your app…
+# …the rest of your app goes here…
