@@ -1,4 +1,4 @@
 pandas
 streamlit
-streamlit-oauth
 requests
+git+https://github.com/ai-yash/st-oauth.git
