@@ -1,6 +1,6 @@
 import streamlit as st
 
-─── DEBUG BLOCK ──────────────────────────────────────────────────────────
+#─── DEBUG BLOCK ──────────────────────────────────────────────────────────
 
 # Kick off login if necessary
 if not st.user.is_logged_in:
