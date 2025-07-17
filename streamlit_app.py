@@ -2,17 +2,9 @@ import streamlit as st
 
 # ─── DEBUG BLOCK ──────────────────────────────────────────────────────────
 
-
-# ▶️ DEBUG: show exactly what Streamlit read from secrets
-st.write("🔑 redirect_uri:", st.secrets["auth"]["redirect_uri"])
-st.write("🎫 client_id:   ", st.secrets["auth"]["auth0"]["client_id"])
-st.write("🔒 client_secret:", st.secrets["auth"]["auth0"]["client_secret"])
+st.write("Client ID:", st.secrets.auth.auth0.client_id)
+st.write("Client Secret:", st.secrets.auth.auth0.client_secret)
 st.stop()
-
-# import streamlit as st
-# st.write("Client ID:", st.secrets.auth.auth0.client_id)
-# st.write("Client Secret:", st.secrets.auth.auth0.client_secret)
-# st.stop()
 
 # # ▶️ DEBUG: print out what redirect_uri we actually loaded
 # redirect = st.secrets["auth"]["redirect_uri"]
