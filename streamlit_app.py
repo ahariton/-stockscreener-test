@@ -1,16 +1,24 @@
 import streamlit as st
+from streamlit_oauth import OAuth2Component
 
-# Simple login using Streamlit's native login
-user = st.login()
+oauth2 = OAuth2Component(
+    client_id=st.secrets.oauth.client_id,
+    client_secret=st.secrets.oauth.client_secret,
+    authorize_url=st.secrets.oauth.auth_url,
+    token_url=st.secrets.oauth.token_url,
+    redirect_uri=st.secrets.oauth.redirect_uri,
+)
 
-if not user:
+token = oauth2.authorize_button("🔐 Log in with Auth0")
+
+if not token:
     st.stop()
 
-# Restrict access by email
-ALLOWED_USERS = ["andrewhariton@gmail.com", "teammate@company.com"]
-if user.email not in ALLOWED_USERS:
-    st.error("🚫 Unauthorized access.")
+userinfo = oauth2.get_user_info(token)
+email = userinfo.get("email")
+
+if email not in st.secrets.oauth.allowed_emails:
+    st.error("❌ Unauthorized")
     st.stop()
 
-st.title("📈 Weekly Options Stock Screener")
-# ... your app here ...
+st.success(f"✅ Welcome, {email}!")
