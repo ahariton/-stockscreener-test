@@ -3,15 +3,15 @@ import requests
 
 from streamlit_oauth import OAuth2Component
 
-oauth2 = OAuth2Component(
-    client_id=st.secrets.oauth.client_id,
-    client_secret=st.secrets.oauth.client_secret,
-    redirect_uri=st.secrets.oauth.redirect_uri,
-    authorize_endpoint=st.secrets.oauth.auth_url,
-    token_endpoint=st.secrets.oauth.token_url,
-)
+oauth2 = OAuth2Component(st.secrets.oauth.client_id, st.secrets.oauth.client_secret)
 
-token = oauth2.authorize_button("🔐 Login with Auth0", "auth0_login")
+token = oauth2.authorize_button(
+    name="Login with Auth0",
+    authorize_url=st.secrets.oauth.auth_url,
+    token_url=st.secrets.oauth.token_url,
+    redirect_uri=st.secrets.oauth.redirect_uri,
+    key="auth",
+)
 
 if token:
     resp = requests.get(
