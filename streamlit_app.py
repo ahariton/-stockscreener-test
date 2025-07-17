@@ -1,19 +1,15 @@
 import streamlit as st
 
-# Step 1: Login
-user = st.login(provider="auth0")
-if not user:
+# Kick off login if necessary
+if not st.user.is_logged_in:
+    st.login("auth0")
     st.stop()
 
-# Step 2: Access control
-email = user.get("email", "")
-allowed = st.secrets.auth.auth0.allowed_emails
-
-if email not in allowed:
-    st.error("🚫 You are not authorized to access this app.")
+email = st.user["email"]
+if email not in st.secrets.auth.auth0.allowed_emails:
+    st.error("🚫 You are not authorized.")
     st.logout()
     st.stop()
 
-# Step 3: Proceed with app
 st.success(f"✅ Logged in as {email}")
-st.write("🎉 Your secure app starts here.")
+# …rest of your app…
