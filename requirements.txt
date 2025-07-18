@@ -2,3 +2,6 @@ streamlit>=1.34
 pandas
 requests
 authlib
+yfinance
+beautifulsoup4
+tqdm
