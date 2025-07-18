@@ -10,7 +10,14 @@ email = st.user["email"]
 
 # 3) If it’s not in your allow-list, show a message and stop the app
 if email not in st.secrets.auth.auth0.allowed_emails:
-    st.error("🚫 You are not authorized to use this app.")
+    st.error(
+        "🚫 You are not authorized to use this app.\n\n"
+        "If you accidentally signed in with the wrong email, click the button below to try again."
+    )
+    if st.button("🔄 Sign in with a different account"):
+        # clear out the current session and kick off login again
+        st.logout()
+        st.experimental_rerun()
     st.stop()
 
 # 4) Otherwise they’re good
